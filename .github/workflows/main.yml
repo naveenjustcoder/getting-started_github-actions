@@ -23,15 +23,39 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Step 1 - Log the pre build disk space
+        run: df -hT
+
+      - name: Step 2 - Checkout the main GitHub branch
+        uses: actions/checkout@v4
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: sh ./github-actions-script.sh
+      - name: Step 3 - Set Up JDK 1.8
+        uses: actions/setup-java@v4
+        with: 
+            distribution: 'temurin'
+            java-version: '1.8'
+      - run: java -version
+        
+      - name: Step 4 - Build your Jakarta Web app with Maven
+        run: echo mvn -B package --file pom.xml
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Step 5 - Build your Native Android App
         run: |
-          echo Nothing to see in multi line "script" from $USER or "$USER"
-          echo Here are the contents of the folder
-          ls -a
+          echo Here is the ANDROID_SDK_ROOT
+          echo $ANDROID_SDK_ROOT
+
+      - name: Step 6 - Run your Selenium Tests
+        run: |
+          echo the SELENIUM_JAR_PATH
+          echo $SELENIUM_JAR_PATH
+
+      - name: Step 7 - Log Build tool versions
+        run: |
+          git --version
+          mvn --version
+          ant -version
+          gradle --version
+
+      - name: Step 8 - Log the Post-build disk space
+        run: df -hT
