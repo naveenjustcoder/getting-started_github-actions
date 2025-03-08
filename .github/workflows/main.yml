@@ -20,7 +20,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Step 1 - Log the pre-build disk space
-        run: df -hT
+        run: df -hT && ls -a
 
       - name: Step 2 - Checkout the Git main branch
         uses: actions/checkout@v4
